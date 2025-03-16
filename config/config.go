@@ -9,9 +9,9 @@ import (
 
 type Config struct {
 	DatabaseURL string
-	RedisURL string
-	ServerPort string
-	BaseURL string
+	RedisURL    string
+	ServerPort  string
+	BaseURL     string
 }
 
 func LoadConfig() (*Config, error) {
@@ -39,9 +39,9 @@ func LoadConfig() (*Config, error) {
 
 	return &Config{
 		DatabaseURL: dbURL,
-		RedisURL: redisURL,
-		ServerPort: serverPort,
-		BaseURL: baseURL,
+		RedisURL:    redisURL,
+		ServerPort:  serverPort,
+		BaseURL:     baseURL,
 	}, nil
 }
 
