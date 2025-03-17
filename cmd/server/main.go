@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/bharabhi01/shorturl-go/api/handlers"
+	"github.com/bharabhi01/shorturl-go/api/middleware"
 	"github.com/bharabhi01/shorturl-go/config"
 	"github.com/bharabhi01/shorturl-go/internal/repository"
 	"github.com/bharabhi01/shorturl-go/internal/service"
@@ -40,7 +41,9 @@ func main() {
 	urlHandler := handlers.NewURLHandler(urlService)
 
 	// Create router
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(middleware.Logger())
 
 	// Define routes
 	router.POST("/api/urls", urlHandler.CreateShortURL)
