@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -12,6 +13,7 @@ type Config struct {
 	RedisURL    string
 	ServerPort  string
 	BaseURL     string
+	RateLimit   int
 }
 
 func LoadConfig() (*Config, error) {
@@ -33,6 +35,11 @@ func LoadConfig() (*Config, error) {
 	serverPort := getEnv("SERVER_PORT", "8080")
 	baseURL := getEnv("BASE_URL", "http://localhost:8080")
 
+	rateLimit, err := strconv.Atoi(getEnv("RATE_LIMIT", "100"))
+	if err != nil {
+		return nil, fmt.Errorf("invalid rate limit: %v", err)
+	}
+
 	dbURL := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPassword, dbName)
 
 	redisURL := fmt.Sprintf("redis://%s:%s@%s:%s/0", "", redisPassword, redisHost, redisPort)
@@ -42,6 +49,7 @@ func LoadConfig() (*Config, error) {
 		RedisURL:    redisURL,
 		ServerPort:  serverPort,
 		BaseURL:     baseURL,
+		RateLimit:   rateLimit,
 	}, nil
 }
 

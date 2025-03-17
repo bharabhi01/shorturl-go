@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/bharabhi01/shorturl-go/api/handlers"
 	"github.com/bharabhi01/shorturl-go/api/middleware"
@@ -45,8 +46,10 @@ func main() {
 	router.Use(gin.Recovery())
 	router.Use(middleware.Logger())
 
-	// Define routes
-	router.POST("/api/urls", urlHandler.CreateShortURL)
+	apiGroup := router.Group("/api")
+	apiGroup.Use(middleware.RateLimiter(cache.Client, cfg.RateLimit, time.Minute))
+	apiGroup.POST("/urls", urlHandler.CreateShortURL)
+
 	router.GET("/:shortCode", urlHandler.RedirectToLongURL)
 
 	// Health check endpoint
